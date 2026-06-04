@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radiografía del alquiler en Barcelona</title>
+
+    <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+    --bg: #f6f1eb;
+        --card: #fffdf9;
+        --text: #152018;
+        --muted: #66736b;
+        --green: #0f6b4f;
+    --green-soft: #dceee6;
+        --border: #e7ded3;
+        --shadow: 0 18px 45px rgba(38, 30, 22, 0.08);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+        font-family: Georgia, 'Times New Roman', serif;
+        line-height: 1.05;
+    }
+
+    .layout {
+        display: grid;
+        rid-template-columns: 150px 1fr;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding: 32px 22px;
+        background: #fbf8f3;
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .logo {
+        text-align: center;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 40px;
+    }
+
+    .logo-icon {
+        font-size: 34px;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .menu a {
+        text-decoration: none;
+        color: var(--text);
+        font-size: 0.9rem;
+        padding: 12px 14px;
+        border-radius: 12px;
+        transition: 0.2s;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+        background: var(--green);
+        color: white;
+    }
+
+    .sidebar-footer {
+        font-size: 0.75rem;
+        color: var(--muted);
+    }
+
+    .page {
+        width: min(1180px, 92%);
+        margin: 0 auto;
+        padding: 60px 0 40px;
+    }
+
+    .hero {
+        min-height: 430px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+        margin-bottom: 42px;
+    }
+
+    .hero h1 {
+        font-size: clamp(3rem, 6vw, 6rem);
+        margin-bottom: 24px;
+    }
+
+    .hero .lead {
+        max-width: 620px;
+        color: var(--green);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+    }
+
+    .hero p {
+        max-width: 640px;
+        color: var(--muted);
+    }
+
+    .hero-visual {
+        min-height: 330px;
+        border-radius: 36px;
+        background:
+        linear-gradient(90deg, rgba(246, 241, 235, 0.2), rgba(246, 241, 235, 0.95)),
+        url('https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=80');
+        background-size: cover;
+        background-position: center;
+        box-shadow: var(--shadow);
+    }
+
+    .kpis {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+        margin-bottom: 26px;
+    }
+
+    .kpi {
+        background: var(--card);
+        padding: 24px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+    }
+
+    .kpi small {
+        display: block;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        font-weight: 800;
+        margin-bottom: 14px;
+        color: var(--muted);
+    }
+
+    .kpi strong {
+        font-family: Georgia, 'Times New Roman', serif;
+        display: block;
+        font-size: 1.75rem;
+        margin-bottom: 8px;
+    }
+
+    .kpi span {
+        color: var(--green);
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    .story-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+        margin: 24px 0;
+        padding: 28px;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 34px;
+        align-items: stretch;
+    }
+
+    .story-text {
+        border-right: 1px solid var(--border);
+        padding-right: 28px;
+    }
+
+    .number {
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 2rem;
+        color: var(--green);
+        font-weight: 800;
+        margin-bottom: 18px;
+    }
+
+    .story-text h2 {
+        font-size: 2rem;
+        margin-bottom: 18px;
+    }
+
+    .story-text p {
+        color: var(--muted);
+        margin-bottom: 18px;
+    }
+
+    .insight {
+        margin-top: 28px;
+        background: #eef6f1;
+        border-left: 4px solid var(--green);
+        padding: 18px;
+        border-radius: 14px;
+        font-size: 0.95rem;
+        color: var(--text);
+    }
+
+    .chart-area {
+        min-height: 360px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(180deg, #ffffff, #fbf7f1);
+        border-radius: 18px;
+        border: 1px dashed #d8cec2;
+        overflow: hidden;
+    }
+
+    .chart-area iframe {
+        width: 100%;
+        height: 420px;
+        border: 0;
+    }
+
+    .placeholder {
+        text-align: center;
+        color: var(--muted);
+        padding: 28px;
+    }
+
+    .placeholder strong {
+        display: block;
+        color: var(--green);
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .double {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .double .story-text {
+        border-right: 0;
+        padding-right: 0;
+    }
+
+    .conclusion {
+        background: linear-gradient(135deg, #e5f2eb, #fffdf9);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 34px;
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 32px;
+        align-items: center;
+    }
+
+    .conclusion h2 {
+        font-size: 2.2rem;
+    }
+
+    .conclusion ul {
+        list-style: none;
+        display: grid;
+        gap: 14px;
+    }
+
+    .conclusion li::before {
+        content: '✓';
+        color: var(--green);
+        font-weight: 800;
+        margin-right: 10px;
+    }
+
+    .methodology {
+        margin: 40px 0 10px;
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 980px) {
+        .layout {
+        grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+        position: static;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+    }
+
+    .menu {
+        flex-direction: row;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+        .hero,
+        .story-card,
+        .conclusion {
+        grid-template-columns: 1fr;
+    }
+
+    .story-text {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        padding-right: 0;
+        padding-bottom: 22px;
+    }
+
+    .kpis {
+        grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 620px) {
+        .kpis {
+        grid-template-columns: 1fr;
+        }
+
+        .page {
+        width: 94%;
+        padding-top: 30px;
+        }
+
+        .hero-visual {
+        min-height: 220px;
+        }
+    }
+</style>
+</head>
+
+<body>
+    <div class="layout">
+    <aside class="sidebar">
+        <div>
+        <div class="logo">
+            <span class="logo-icon">⌂</span>
+            ALQUILER<br>BCN
+        </div>
+
+        <nav class="menu">
+            <a class="active" href="#inicio">Inicio</a>
+            <a href="#evolucion">Evolución</a>
+            <a href="#distritos">Distritos</a>
+            <a href="#mapa">Mapa</a>
+            <a href="#comparativas">Comparativas</a>
+            <a href="#metodologia">Metodología</a>
+        </nav>
+        </div>
+
+        <div class="sidebar-footer">
+        <p>Actualización<br>Mayo 2024</p><br>
+        <p>Fuente de datos<br>Idealista / Dataset propio</p>
+        </div>
+    </aside>
+
+    <main class="page" id="inicio">
+        <section class="hero">
+        <div>
+            <h1>Radiografía del alquiler en Barcelona</h1>
+            <p class="lead">
+            Un análisis visual sobre la evolución del precio del alquiler y las desigualdades territoriales en la ciudad.
+            </p>
+            <p>
+            Barcelona vive una presión creciente en el mercado del alquiler. Este dashboard explora cómo han cambiado los precios, qué distritos concentran los valores más altos y qué factores influyen en el coste de la vivienda.
+            </p>
+        </div>
+        <div class="hero-visual"></div>
+        </section>
+
+        <section class="kpis">
+        <article class="kpi">
+            <small>Precio medio</small>
+            <strong>1.250 €</strong>
+            <span>/ mes</span>
+        </article>
+        <article class="kpi">
+            <small>Distrito más caro</small>
+            <strong>Sarrià</strong>
+            <span>18,2 €/m²</span>
+        </article>
+        <article class="kpi">
+            <small>Distrito más económico</small>
+            <strong>Nou Barris</strong>
+            <span>9,1 €/m²</span>
+        </article>
+        <article class="kpi">
+            <small>Variación anual</small>
+            <strong>+12,4%</strong>
+            <span>2023 - 2024</span>
+        </article>
+        <article class="kpi">
+            <small>Nº de anuncios</small>
+            <strong>18.732</strong>
+            <span>analizados</span>
+        </article>
+        </section>
+
+        <section class="story-card" id="evolucion">
+        <div class="story-text">
+            <div class="number">01.</div>
+            <h2>El alquiler no ha dejado de subir</h2>
+            <p>
+            El precio medio del alquiler en Barcelona ha aumentado de forma constante en los últimos años, especialmente a partir de 2021.
+            </p>
+            <p>
+            Esta evolución muestra una presión creciente sobre los hogares que buscan vivienda en la ciudad.
+            </p>
+            <div class="insight">
+            En cuatro años, el precio medio ha subido aproximadamente un 62%.
+            </div>
+        </div>
+
+        <div class="chart-area">
+            <!-- Sustituye esto por el iframe de Datawrapper -->
+            <div class="placeholder">
+            <strong>Gráfico Datawrapper</strong>
+            Evolución del precio medio del alquiler<br>
+            Pega aquí tu iframe.
+            </div>
+        </div>
+        </section>
+
+        <section class="story-card" id="distritos">
+        <div class="story-text">
+            <div class="number">02.</div>
+            <h2>Grandes diferencias entre distritos</h2>
+            <p>
+            Los precios del alquiler presentan desigualdades muy marcadas según la zona de la ciudad.
+            </p>
+            <p>
+            Sarrià - Sant Gervasi aparece como el distrito más caro, mientras que Nou Barris se mantiene como el más asequible.
+            </p>
+            <div class="insight">
+            El distrito más caro puede llegar a duplicar el precio medio del más económico.
+            </div>
+        </div>
+
+        <div class="chart-area">
+            <div class="placeholder">
+            <strong>Gráfico Datawrapper</strong>
+            Ranking de precio medio por distrito<br>
+            Barras horizontales.
+            </div>
+        </div>
+        </section>
+
+        <section class="story-card" id="mapa">
+        <div class="story-text">
+            <div class="number">03.</div>
+            <h2>Los precios más altos se concentran en el centro</h2>
+            <p>
+            El mapa permite visualizar cómo se distribuye territorialmente el precio medio del alquiler.
+            </p>
+            <p>
+            Los tonos más intensos indican zonas con mayor presión de precios, especialmente en áreas céntricas y bien conectadas.
+            </p>
+            <div class="insight">
+            La localización sigue siendo uno de los factores más determinantes del precio.
+            </div>
+        </div>
+
+        <div class="chart-area">
+            <div class="placeholder">
+            <strong>Mapa Datawrapper</strong>
+            Precio medio por distrito o barrio<br>
+            Mapa coroplético.
+            </div>
+        </div>
+        </section>
+
+        <section class="story-card double" id="comparativas">
+        <div class="story-text">
+            <div class="number">04.</div>
+            <h2>El tamaño importa: a mayor superficie, mayor precio</h2>
+            <p>
+            Existe una relación positiva entre la superficie de la vivienda y el precio final del alquiler.
+            </p>
+            <div class="chart-area">
+            <div class="placeholder">
+                <strong>Scatter plot</strong>
+                Relación precio - superficie
+            </div>
+            </div>
+            <div class="insight">
+            Cada 10 m² adicionales están asociados a un incremento medio del precio mensual.
+            </div>
+        </div>
+
+        <div class="story-text">
+            <div class="number">05.</div>
+            <h2>La mayoría de alquileres se sitúan entre 800 € y 1.600 €</h2>
+            <p>
+            Aunque existen anuncios con precios muy elevados, la mayor parte de la oferta se concentra en rangos intermedios.
+            </p>
+            <div class="chart-area">
+            <div class="placeholder">
+                <strong>Histograma</strong>
+                Distribución de precios
+            </div>
+            </div>
+            <div class="insight">
+            El rango dominante ayuda a entender qué precios son más habituales en el mercado.
+            </div>
+        </div>
+        </section>
+
+        <section class="conclusion">
+        <h2>Conclusiones principales</h2>
+        <ul>
+            <li>El precio medio del alquiler ha aumentado de forma clara en los últimos años.</li>
+            <li>Existen fuertes desigualdades territoriales entre distritos.</li>
+            <li>La localización y la superficie son factores clave en el precio de la vivienda.</li>
+            <li>El mercado muestra una presión creciente sobre los residentes.</li>
+        </ul>
+        <section>
+
+        <section class="methodology" id="metodologia">
+        <h3>Metodología</h3>
+        <p>
+        Análisis realizado a partir de anuncios de alquiler publicados en mayo de 2024. Se han analizado variables como precio, superficie, distrito, tipología de vivienda y evolución temporal. Sustituye este texto por tu fuente real de datos.
+        </p>
+        </section>
+    </main>
+    </div>
+</body>
+</html>
